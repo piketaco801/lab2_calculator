@@ -10,9 +10,13 @@ class calculator : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
 
-        val result = intent.getDoubleExtra("result", 0.0)
+        val result = intent.getDoubleExtra("result", Double.NaN)
 
         val resultTextView = findViewById<TextView>(R.id.textViewResult)
-        resultTextView.text = "Result: $result"
+        resultTextView.text = if (result.isNaN()) {
+            "Result: NaN"
+        } else {
+            "Result: $result"
+        }
     }
 }

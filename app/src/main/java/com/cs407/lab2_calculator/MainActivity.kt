@@ -21,36 +21,45 @@ class MainActivity : AppCompatActivity() {
         val buttonDivide = findViewById<Button>(R.id.buttonDivide)
 
         buttonAdd.setOnClickListener {
-            val result = number1.text.toString().toDouble() + number2.text.toString().toDouble()
+            val result = calculateResult(number1.text.toString(), number2.text.toString()) { a, b -> a + b }
             navigateToResult(result)
         }
 
         buttonSubtract.setOnClickListener {
-            val result = number1.text.toString().toDouble() - number2.text.toString().toDouble()
+            val result = calculateResult(number1.text.toString(), number2.text.toString()) { a, b -> a - b }
             navigateToResult(result)
         }
 
         buttonMultiply.setOnClickListener {
-            val result = number1.text.toString().toDouble() * number2.text.toString().toDouble()
+            val result = calculateResult(number1.text.toString(), number2.text.toString()) { a, b -> a * b }
             navigateToResult(result)
         }
 
         buttonDivide.setOnClickListener {
-            val divisor = number2.text.toString().toDouble()
-            if (divisor == 0.0) {
-                // Handle divide by zero error
-                navigateToResult(Double.NaN)
-            } else {
-                val result = number1.text.toString().toDouble() / divisor
-                navigateToResult(result)
+            val result = calculateResult(number1.text.toString(), number2.text.toString()) { a, b ->
+                if (b == 0.0) Double.NaN else a / b
             }
+            navigateToResult(result)
+        }
+    }
+
+    private fun calculateResult(input1: String, input2: String, operation: (Double, Double) -> Double): Double {
+        return try {
+            if (input1.isBlank() || input2.isBlank()) {
+                Double.NaN
+            } else {
+                val num1 = input1.toDouble()
+                val num2 = input2.toDouble()
+                operation(num1, num2)
+            }
+        } catch (e: NumberFormatException) {
+            Double.NaN
         }
     }
 
     private fun navigateToResult(result: Double) {
-        val intent = Intent(this, calculator::class.java) // 혹은 정확한 클래스 이름
+        val intent = Intent(this, calculator::class.java)
         intent.putExtra("result", result)
         startActivity(intent)
     }
-
 }
