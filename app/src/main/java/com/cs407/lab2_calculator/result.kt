@@ -14,7 +14,7 @@ class calculator : AppCompatActivity() {
 
         val resultTextView = findViewById<TextView>(R.id.textViewResult)
         resultTextView.text = if (result.isNaN()) {
-            "Result: NaN"
+            "Error"
         } else {
             "Result: $result"
         }
